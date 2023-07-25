@@ -11,11 +11,19 @@ set colorcolumn=72
 set hlsearch
 set ruler
 set ignorecase
+
+let mapleader = " "
+
 " leetcodes settings
-let g:leetcode_browser = 'firefox'
+let g:leetcode_browser = 'chrome'
 let g:leetcode_solution_filetype = 'python'
 let g:leetcode_hide_paid_only = 1
 let g:leetcode_problemset = 'Algorithms'
+
+nnoremap <leader>lk :LeetCodeList<cr>
+nnoremap <leader>lt :LeetCodeTest<cr>
+nnoremap <leader>ls :LeetCodeSubmit<cr>
+nnoremap <leader>li :LeetCodeSignIn<cr>
 
 " colorscheme
 colorscheme badwolf
@@ -41,13 +49,36 @@ autocmd VimEnter * NERDTree | wincmd p
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
 " mappings
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
+" moving between windows 
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" moving windows
+nnoremap <leader>h <C-W>H
+nnoremap <leader>j <C-W>J
+nnoremap <leader>k <C-W>K
+nnoremap <leader>l <C-W>L
+
+" disable arrow movement; resize splits instead.
+nnoremap <Up> :resize +2<CR>
+nnoremap <Down> :resize -2<CR>
+nnoremap <Left> :vertical resize +2<CR>
+nnoremap <Right> :vertical resize -2<CR>
+
+" remappings
+nnoremap w W
+nnoremap b B
+nnoremap e E
+
+
 map <F1> :NERDTreeToggle<CR>
+map <F2> :NERDTreeFocus<CR>
 
-
+map <F5> :call CompileRun()<CR>
+imap <F5> <Esc>:call CompileRun()<CR>
+vmap <F5> <Esc>:call CompileRun()<CR>
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -84,4 +115,14 @@ Plugin 'enricobacis/vim-airline-clock'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+
+
+func! CompileRun()
+exec "w"
+if &filetype == 'sh'
+    exec "!time bash %"
+elseif &filetype == 'python'
+    exec "!time python3 %"
+endif
+endfunc
 
